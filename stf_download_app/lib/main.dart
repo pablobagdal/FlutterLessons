@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,6 +14,17 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late bool _isDownloading;
+  late double _downloadProgress;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _isDownloading = false;
+    _downloadProgress = 0.0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,33 +37,54 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: Container(
             padding: EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const <Widget>[
-                LinearProgressIndicator(value: 23),
-                Text(
-                  '23 %',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+            child: _isDownloading
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      LinearProgressIndicator(value: _downloadProgress),
+                      Text(
+                        '${(_downloadProgress * 100).round()}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      )
+                    ],
+                  )
+                : const Text(
+                    'Text button to download',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
                   ),
-                ),
-                Text(
-                  'Text button to download',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
-        floatingActionButton: const FloatingActionButton(
-          onPressed: null,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _isDownloading = !_isDownloading;
+              _updateProgress();
+            });
+          },
           child: Icon(Icons.cloud_download),
         ),
       ),
     );
+  }
+
+  void _updateProgress() {
+    const oneSec = Duration(milliseconds: 20);
+    Timer.periodic(oneSec, (Timer t) {
+      setState(() {
+        _downloadProgress += 0.01;
+        if (_downloadProgress.toStringAsFixed(1) == '1.0') {
+          _isDownloading = false;
+          t.cancel();
+          _downloadProgress = 0.0;
+          return;
+        }
+      });
+    });
   }
 }
