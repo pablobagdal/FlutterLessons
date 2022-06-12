@@ -44,7 +44,7 @@ class CounterWidget extends StatefulWidget {
 }
 
 class _CounterWidgetState extends State<CounterWidget> {
-  int _counter = 666;
+  int _counter = 1000000;
 
   @override
   void initState() {
@@ -53,39 +53,38 @@ class _CounterWidgetState extends State<CounterWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(5),
-      width: 170.0,
-      height: 50.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: Colors.indigo[50],
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: Colors.indigo[50],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _counter--;
+                });
+              },
+              icon: Icon(Icons.remove),
+            ),
+            Text(
+              "$_counter",
+              style: TextStyle(fontSize: 30),
+            ),
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  _counter++;
+                });
+              },
+              icon: Icon(Icons.add),
+            ),
+          ],
+        ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _counter--;
-              });
-            },
-            icon: Icon(Icons.remove),
-          ),
-          Text(
-            "$_counter",
-            style: TextStyle(fontSize: 30),
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                _counter++;
-              });
-            },
-            icon: Icon(Icons.add),
-          ),
-        ],
-      ),
-    );
+    ]);
   }
 }
