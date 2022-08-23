@@ -1,16 +1,19 @@
-# manual_serialization
+# Manual JSON serialization
 
-A new Flutter project.
+This is test project where I developed a manual serialization of some JSON.
 
-## Getting Started
+## Setup
 
-This project is a starting point for a Flutter application.
+You can download this project as an example of manual serialization.
 
-A few resources to get you started if this is your first Flutter project:
+For this kind of work it could be useful for you
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- [Readable view of JSON from any http link](https://jsonformatter.org/json-viewer)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+In this project I worked with offices, which have many fields but I used only name, address and image.
+
+The text is in Russian so don't be surprised.
+Below is the video of how it works.
+
+https://user-images.githubusercontent.com/85275741/186224872-663e6247-5059-4b74-be79-9c9cf2bd521e.mov
+
