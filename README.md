@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-hello hello
-=======
-# FlutterLessons
-Learning Flutter
->>>>>>> 1acf29c23de3c9044f6811cdf4961550571a47ca
+This repository is used for learning Flutter
+So here you can see my progress in different Widgets, Navigations, APIs e.t.c.
+
+I do a better README for most fulldone projects such as 21_weather_app or 32_manual_serialization
