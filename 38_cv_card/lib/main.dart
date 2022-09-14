@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'c_v_icons_icons.dart';
 
 const _tgAvatar = 'assets/ava.png';
 
-// class Links {
-//   static const github = "https://pablobagdal.github.io";
-//   static const telegram = "https://t.me/pablobagdal";
-//   static const email = "pablobagdal@gmail.com";
-//   // что за безымянная странная хуйня ниже пока не знаю
-//   const Links._();
-// }
+class Links {
+  static const github = "https://pablobagdal.github.io";
+  static const telegram = "https://t.me/pablobagdal";
+  static const email = "pablobagdal@gmail.com";
+  // что за безымянная странная хуйня ниже пока не знаю
+  const Links._();
+}
 
 void main() => runApp(const App());
 
@@ -48,7 +51,7 @@ class HomePage extends StatelessWidget {
                   26.0,
                 ),
                 child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -90,32 +93,52 @@ class HomePage extends StatelessWidget {
                                 child: IconButton(
                                   iconSize: 32,
                                   icon: const Icon(
-                                    Icons.cloud_circle,
+                                    CVIcons.telegram,
                                   ),
-                                  onPressed: () {
-                                    //TODO telegram
-                                  },
+                                  onPressed: () => launchUrl(
+                                    Uri.parse(
+                                      Links.telegram,
+                                    ),
+                                  ),
                                 ),
                               ),
                               Flexible(
                                 child: IconButton(
                                   iconSize: 32,
                                   icon: const Icon(
-                                    Icons.account_circle,
+                                    CVIcons.github,
                                   ),
-                                  onPressed: () {
-                                    //TODO github
-                                  },
+                                  onPressed: () => launchUrl(
+                                    Uri.parse(
+                                      Links.github,
+                                    ),
+                                  ),
                                 ),
                               ),
                               Flexible(
                                 child: IconButton(
                                   iconSize: 32,
                                   icon: const Icon(
-                                    Icons.circle_notifications,
+                                    CVIcons.email,
                                   ),
                                   onPressed: () {
-                                    //TODO email
+                                    // launchUrl(
+                                    //   Uri.parse(
+                                    //     Links.email,
+                                    //   ),
+                                    // );
+                                    Clipboard.setData(
+                                      const ClipboardData(
+                                        text: Links.email,
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Скопировано",
+                                        ),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
