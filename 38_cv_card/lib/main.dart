@@ -1,8 +1,13 @@
+import 'dart:async';
+
+import 'package:cv_card/error_handler.dart';
 import 'package:cv_card/logger.dart';
+import 'package:cv_card/s.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'c_v_icons_icons.dart';
+import 'c_v_icons.dart';
 
 const _tgAvatar = 'assets/ava.png';
 
@@ -14,7 +19,15 @@ class Links {
   const Links._();
 }
 
-void main() => runApp(const App());
+void main() {
+  runZonedGuarded(() {
+    initLogger();
+    logger.info('Start main');
+
+    ErrorHandler.init();
+    runApp(const App());
+  }, ErrorHandler.recordError);
+}
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -25,33 +38,60 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   var _isDark = false;
+  var _locale = S.en;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.supportedLocales,
+        locale: _locale,
         builder: (context, child) => Material(
           child: Stack(
             children: [
               child ?? const SizedBox.shrink(),
               Align(
                 alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: EdgeInsets.all(30),
-                  child: IconButton(
-                    onPressed: () {
-                      final newMode = !_isDark;
-                      logger.info('Switch theme mode: '
-                          '${_isDark.asThemeName} -> ${newMode.asThemeName}');
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(30),
+                      child: IconButton(
+                        onPressed: () {
+                          final newMode = !_isDark;
+                          logger.info('Switch theme mode: '
+                              '${_isDark.asThemeName} -> ${newMode.asThemeName}');
 
-                      setState(
-                        () {
-                          _isDark = newMode;
+                          setState(
+                            () {
+                              _isDark = newMode;
+                            },
+                          );
                         },
-                      );
-                    },
-                    icon: Icon(
-                      _isDark ? Icons.nightlight_round : Icons.sunny,
+                        icon: Icon(
+                          _isDark ? Icons.nightlight_round : Icons.sunny,
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: InkResponse(
+                        child: Text(_locale.languageCode.toUpperCase()),
+                        onTap: () {
+                          final newLocale = S.isEn(_locale) ? S.ru : S.en;
+                          logger.info(
+                            'Switch language: '
+                            '${_locale.languageCode} -> ${newLocale.languageCode}',
+                          );
+                          setState(() => _locale = newLocale);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -184,14 +224,14 @@ class IdentifyWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Павел Багдалов",
+        Text(
+          S.of(context).name,
           style: TextStyle(
             fontSize: 28,
           ),
         ),
-        const Text(
-          "Работаю на себя",
+        Text(
+          S.of(context).company,
           style: TextStyle(
             fontSize: 18,
           ),
@@ -246,9 +286,9 @@ class LinksWidget extends StatelessWidget {
                 ),
               );
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
+                SnackBar(
                   content: Text(
-                    "Скопировано",
+                    S.of(context).copied,
                   ),
                 ),
               );
