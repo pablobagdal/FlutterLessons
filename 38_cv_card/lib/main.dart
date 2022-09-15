@@ -1,3 +1,4 @@
+import 'package:cv_card/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,7 +24,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  bool _isDark = false;
+  var _isDark = false;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -37,9 +38,13 @@ class _AppState extends State<App> {
                   padding: EdgeInsets.all(30),
                   child: IconButton(
                     onPressed: () {
+                      final newMode = !_isDark;
+                      logger.info('Switch theme mode: '
+                          '${_isDark.asThemeName} -> ${newMode.asThemeName}');
+
                       setState(
                         () {
-                          _isDark = !_isDark;
+                          _isDark = newMode;
                         },
                       );
                     },
@@ -276,4 +281,8 @@ class LinkIcon extends StatelessWidget {
       onPressed: onPressed,
     );
   }
+}
+
+extension _BoolToThemeName on bool {
+  String get asThemeName => this ? 'dark' : 'light';
 }
