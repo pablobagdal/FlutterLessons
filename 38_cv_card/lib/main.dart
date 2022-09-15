@@ -15,15 +15,46 @@ class Links {
 
 void main() => runApp(const App());
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
-    );
-  }
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  bool _isDark = false;
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+        builder: (context, child) => Material(
+          child: Stack(
+            children: [
+              child ?? const SizedBox.shrink(),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: EdgeInsets.all(30),
+                  child: IconButton(
+                    onPressed: () {
+                      setState(
+                        () {
+                          _isDark = !_isDark;
+                        },
+                      );
+                    },
+                    icon: Icon(
+                      _isDark ? Icons.nightlight_round : Icons.sunny,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        theme: _isDark ? ThemeData.dark() : ThemeData.light(),
+        home: const HomePage(),
+      );
 }
 
 class HomePage extends StatelessWidget {
