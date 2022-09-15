@@ -1,5 +1,9 @@
 import 'dart:async';
 
+import 'package:cv_card/app_theme.dart';
+import 'package:cv_card/conponents/card_container.dart';
+import 'package:cv_card/conponents/link_icon.dart';
+import 'package:cv_card/conponents/text.dart';
 import 'package:cv_card/error_handler.dart';
 import 'package:cv_card/logger.dart';
 import 'package:cv_card/s.dart';
@@ -97,7 +101,7 @@ class _AppState extends State<App> {
             ],
           ),
         ),
-        theme: _isDark ? ThemeData.dark() : ThemeData.light(),
+        theme: AppTheme.theme(_isDark),
         home: const HomePage(),
       );
 }
@@ -140,37 +144,6 @@ class CVCard extends StatelessWidget {
             child: AvatarWidget(),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class CVCardContainer extends StatelessWidget {
-  static const _borderRadius = 16.0;
-  final Widget child;
-
-  const CVCardContainer({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.5,
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            26.0,
-          ),
-        ),
-        elevation: 18.0,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(
-            26.0,
-          ),
-          child: child,
-        ),
       ),
     );
   }
@@ -224,17 +197,11 @@ class IdentifyWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        AppTitle(
           S.of(context).name,
-          style: TextStyle(
-            fontSize: 28,
-          ),
         ),
-        Text(
+        AppSubtitle(
           S.of(context).company,
-          style: TextStyle(
-            fontSize: 18,
-          ),
         ),
       ],
     );
@@ -261,11 +228,8 @@ class LinksWidget extends StatelessWidget {
           ),
         ),
         Flexible(
-          child: IconButton(
-            iconSize: 32,
-            icon: const Icon(
-              CVIcons.github,
-            ),
+          child: LinkIcon(
+            icon: CVIcons.github,
             onPressed: () => launchUrl(
               Uri.parse(
                 Links.github,
@@ -274,11 +238,8 @@ class LinksWidget extends StatelessWidget {
           ),
         ),
         Flexible(
-          child: IconButton(
-            iconSize: 32,
-            icon: const Icon(
-              CVIcons.email,
-            ),
+          child: LinkIcon(
+            icon: CVIcons.email,
             onPressed: () {
               Clipboard.setData(
                 const ClipboardData(
@@ -287,7 +248,7 @@ class LinksWidget extends StatelessWidget {
               );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
+                  content: AppText(
                     S.of(context).copied,
                   ),
                 ),
@@ -299,26 +260,6 @@ class LinksWidget extends StatelessWidget {
           flex: 1,
         ),
       ],
-    );
-  }
-}
-
-class LinkIcon extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  const LinkIcon({
-    super.key,
-    required this.icon,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      iconSize: 32,
-      icon: Icon(icon),
-      onPressed: onPressed,
     );
   }
 }
